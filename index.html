@@ -9,8 +9,10 @@
         attribute vec4 vColor;
         varying vec4 fColor;
 
+        uniform mat4 projMatrix;
+
         void main() {
-            gl_Position = vPosition;
+            gl_Position = projMatrix * vPosition;
             fColor = vColor;			// Pass point color to fragment shader
         }
     </script>
@@ -21,7 +23,7 @@
 
         void main()
         {
-            gl_FragColor = fColor;
+            gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
         }
     </script>
 
@@ -37,15 +39,11 @@
 <body onload="main()">
 
 <div style="text-align: center">
-    <h1 id='htitle'>My Vector Graphics Editor</h1>
+    <h1 id='htitle'>CS 4731 Project 1 - Part 2</h1>
 
     <canvas id="webgl" width="400" height="400" style="border: 1px solid black;">
         Please use a browser that supports the "canvas" tag.
     </canvas>
-
-    <form id="fileupload" enctype="multipart/form-data">
-        <input type="file" id="files" name="files[]" />
-    </form>
 
 </div>
 
