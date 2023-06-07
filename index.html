@@ -7,10 +7,14 @@
     <script id="vshader" type="x-shader/x-vertex">
         attribute vec4 vPosition;
         attribute vec4 vColor;
+
+        uniform mat4 modelMatrix;
+        uniform mat4 projMatrix;
+
         varying vec4 fColor;
 
         void main() {
-            gl_Position = vPosition;
+             gl_Position = projMatrix * modelMatrix * vPosition;
             fColor = vColor;			// Pass point color to fragment shader
         }
     </script>
@@ -44,7 +48,7 @@
     </canvas>
 
     <form id="fileupload" enctype="multipart/form-data">
-        <input type="file" id="files" name="files[]" />
+        <input type="file" id="files" name="files[]">
     </form>
 
 </div>
