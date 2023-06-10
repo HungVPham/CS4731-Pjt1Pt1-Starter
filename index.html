@@ -9,10 +9,11 @@
         attribute vec4 vColor;
         varying vec4 fColor;
 
+        uniform mat4 modelViewMatrix;
         uniform mat4 projMatrix;
 
         void main() {
-            gl_Position = projMatrix * vPosition;
+            gl_Position = projMatrix * modelViewMatrix * vPosition;
             fColor = vColor;			// Pass point color to fragment shader
         }
     </script>

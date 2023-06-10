@@ -1,13 +1,20 @@
 
 // Control vertices for line
 let lineControlPoints = [
-    vec4(-0.75, -0.5, 0.0, 1.0),
-    vec4(-0.25, 0.5, 0.0, 1.0),
-    vec4(0.25, 0.5, 0.0, 1.0),
-    vec4(0.75, -0.5, 0.0, 1.0)
+    vec4(0.0, 0.4, 0.0, 1.0),
+    vec4(-0.75, 0.75, 0.0, 1.0),
+    vec4(-0.60, -0.10, 0.0, 1.0),
+    vec4(0.0, -0.10, 0.0, 1.0),
+    vec4(0.75, -0.5, 0.0, 1.0),
+    vec4(0.35, 0.5, 0.0, 1.0),
+
 ];
 
-let lineSubdivisions = 6;
+let lineSubdivisions = 8;
+
+let eye = vec3(0, 0, 1.5);
+let at = vec3(0.0, 0.0, 0.0);
+let up = vec3(0.0, 1.0, 0.0);
 
 let newPoints = [];
 
@@ -61,21 +68,25 @@ function main()
     // Clear canvas by clearing the color buffer
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    var linePoints = chaikin(lineControlPoints, lineSubdivisions);
+    let linePoints = chaikin(lineControlPoints, lineSubdivisions);
 
-    var vBuffer = gl.createBuffer();
+    let vBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, flatten(linePoints), gl.STATIC_DRAW);
 
-    var projMatrix = perspective(30, 1.0, 0.1, 100.0);
-
-    var projMatrixLoc = gl.getUniformLocation(program, 'projMatrix');
+    let projMatrix = perspective(60, 1.0, 0.1, 100.0);
+    let projMatrixLoc = gl.getUniformLocation(program, 'projMatrix');
     gl.uniformMatrix4fv(projMatrixLoc, false, flatten(projMatrix));
 
-    var vPosition = gl.getAttribLocation( program, "vPosition");
+    let modelViewMatrix = lookAt(eye, at , up);
+    let modelViewMatrixLoc = gl.getUniformLocation(program, 'modelViewMatrix');
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
+
+
+    let vPosition = gl.getAttribLocation( program, "vPosition");
     gl.vertexAttribPointer(vPosition, 4, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(vPosition);
 
-    gl.drawArrays(gl.LINE_STRIP, 0, linePoints.length);
+    gl.drawArrays(gl.LINE_LOOP, 0, linePoints.length);
 }
 
