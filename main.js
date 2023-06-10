@@ -113,6 +113,7 @@ function main()
             gl.enableVertexAttribArray(vColor);
 
             imageCenter = [(splitDims[2] + 2*splitDims[0])/2, (splitDims[3] + 2*splitDims[1])/2];
+            // imageCenter = [(splitDims[2] + splitDims[0])/2, (splitDims[3] + splitDims[1])/2];
 
             reset();
 
@@ -190,15 +191,13 @@ function main()
 
 function mouseDown(event){
     isDragging = true;
-
-    // console.log(event.offsetX);
-    // console.log(event.offsetY);
-
 }
 
 function mouseUp(event){
     isDragging = false;
 }
+
+// gl_Position = projMatrix * dragMatrix * rotateMatrix * scaleMatrix * modelMatrix * vPosition;
 
 function mouseMove(event){
 
@@ -228,7 +227,7 @@ function render(){
     ctMatrix = mult(ctMatrix, rotateMatrix);
 
     // 4. translate back
-    let newTranslation = translate(oldX + newX, oldY + newY, 0);
+    let newTranslation = translate((oldX + newX)*1.3, (oldY + newY)*1.3, 0);
     ctMatrix = mult(newTranslation, mult(ctMatrix, inverse(translateMatrix)));
 
     let ctMatrixLoc = gl.getUniformLocation(program, "modelMatrix");
@@ -239,7 +238,67 @@ function render(){
     gl.drawArrays(gl.LINES, 0, points.length);
 }
 
+// function scalingRender(){
+//
+//     // 1. Translate to the origin
+//     let translateMatrix = translate(splitDims[2]/2 + splitDims[0], splitDims[3]/2 + splitDims[1], 0);
+//
+//     // 2. Scale z by an amount
+//     let scaleMatrix = scalem(scaleFactor, scaleFactor, scaleFactor);
+//     ctMatrix = mult(translateMatrix, scaleMatrix);
+//
+//     // 4. translate back
+//     ctMatrix = mult(ctMatrix, inverse(translateMatrix));
+//
+//     let ctMatrixLoc = gl.getUniformLocation(program, "scaleMatrix");
+//     gl.uniformMatrix4fv(ctMatrixLoc, false, flatten(ctMatrix));
+//
+//     gl.clear(gl.COLOR_BUFFER_BIT);
+//     // Draw lines connecting the points
+//     gl.drawArrays(gl.LINES, 0, points.length);
+// }
+//
+// function rotatingRender(){
+//
+//     // 1. Translate to the origin
+//     let translateMatrix = translate(splitDims[2]/2 + splitDims[0], splitDims[3]/2 + splitDims[1], 0);
+//
+//     // 3. rotate z by theta
+//     let rotateMatrix = rotate(theta, [0, 0, 1]);
+//     ctMatrix = mult(ctMatrix, rotateMatrix);
+//
+//     // 4. translate back
+//     ctMatrix = mult(ctMatrix, inverse(translateMatrix));
+//
+//     let ctMatrixLoc = gl.getUniformLocation(program, "rotateMatrix");
+//     gl.uniformMatrix4fv(ctMatrixLoc, false, flatten(ctMatrix));
+//
+//     gl.clear(gl.COLOR_BUFFER_BIT);
+//     // Draw lines connecting the points
+//     gl.drawArrays(gl.LINES, 0, points.length);
+// }
+//
+// function translationRender(){
+//
+//     // 1. Translate to the origin
+//     let translateMatrix = translate(splitDims[2]/2 + splitDims[0], splitDims[3]/2 + splitDims[1], 0);
+//
+//     // 4. translate back
+//     let newTranslation = translate(oldX + newX, oldY + newY, 0);
+//     ctMatrix = mult(newTranslation, inverse(translateMatrix));
+//
+//     let ctMatrixLoc = gl.getUniformLocation(program, "dragMatrix");
+//     gl.uniformMatrix4fv(ctMatrixLoc, false, flatten(ctMatrix));
+//
+//     gl.clear(gl.COLOR_BUFFER_BIT);
+//     // Draw lines connecting the points
+//     gl.drawArrays(gl.LINES, 0, points.length);
+// }
+
+
 function convert(offsetX, offsetY, movementX, movementY){
+
+    //
 
     newX = convertToWorldX(offsetX) - convertToWorldX(offsetX - movementX);
     newY = convertToWorldY(offsetY) - convertToWorldY(offsetY - movementY);
@@ -282,7 +341,6 @@ function convertToWorldY(y0){
     }
 
     yf = ratio*y0 + (imageCenter[1] + splitDims[3]/2);
-    // yf = (splitDims[3]/canvas.height)*y0 + (splitDims[3] + splitDims[1]);
 
     return yf;
 }
@@ -296,5 +354,9 @@ function reset(){
     oldX = 0;
     oldY = 0;
 
+    // rotatingRender();
+    // scalingRender();
+    // translationRender();
     render();
+
 }

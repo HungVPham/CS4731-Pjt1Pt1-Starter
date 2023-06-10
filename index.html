@@ -9,12 +9,16 @@
         attribute vec4 vColor;
 
         uniform mat4 modelMatrix;
+        uniform mat4 dragMatrix;
+        uniform mat4 rotateMatrix;
+        uniform mat4 scaleMatrix;
         uniform mat4 projMatrix;
 
         varying vec4 fColor;
 
         void main() {
              gl_Position = projMatrix * modelMatrix * vPosition;
+             // gl_Position = projMatrix * dragMatrix * rotateMatrix * scaleMatrix * modelMatrix * vPosition;
             fColor = vColor;			// Pass point color to fragment shader
         }
     </script>
