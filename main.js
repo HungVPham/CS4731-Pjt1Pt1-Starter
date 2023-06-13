@@ -197,8 +197,6 @@ function mouseUp(event){
     isDragging = false;
 }
 
-// gl_Position = projMatrix * dragMatrix * rotateMatrix * scaleMatrix * modelMatrix * vPosition;
-
 function mouseMove(event){
 
     if(isDragging){
@@ -238,76 +236,10 @@ function render(){
     gl.drawArrays(gl.LINES, 0, points.length);
 }
 
-// function scalingRender(){
-//
-//     // 1. Translate to the origin
-//     let translateMatrix = translate(splitDims[2]/2 + splitDims[0], splitDims[3]/2 + splitDims[1], 0);
-//
-//     // 2. Scale z by an amount
-//     let scaleMatrix = scalem(scaleFactor, scaleFactor, scaleFactor);
-//     ctMatrix = mult(translateMatrix, scaleMatrix);
-//
-//     // 4. translate back
-//     ctMatrix = mult(ctMatrix, inverse(translateMatrix));
-//
-//     let ctMatrixLoc = gl.getUniformLocation(program, "scaleMatrix");
-//     gl.uniformMatrix4fv(ctMatrixLoc, false, flatten(ctMatrix));
-//
-//     gl.clear(gl.COLOR_BUFFER_BIT);
-//     // Draw lines connecting the points
-//     gl.drawArrays(gl.LINES, 0, points.length);
-// }
-//
-// function rotatingRender(){
-//
-//     // 1. Translate to the origin
-//     let translateMatrix = translate(splitDims[2]/2 + splitDims[0], splitDims[3]/2 + splitDims[1], 0);
-//
-//     // 3. rotate z by theta
-//     let rotateMatrix = rotate(theta, [0, 0, 1]);
-//     ctMatrix = mult(ctMatrix, rotateMatrix);
-//
-//     // 4. translate back
-//     ctMatrix = mult(ctMatrix, inverse(translateMatrix));
-//
-//     let ctMatrixLoc = gl.getUniformLocation(program, "rotateMatrix");
-//     gl.uniformMatrix4fv(ctMatrixLoc, false, flatten(ctMatrix));
-//
-//     gl.clear(gl.COLOR_BUFFER_BIT);
-//     // Draw lines connecting the points
-//     gl.drawArrays(gl.LINES, 0, points.length);
-// }
-//
-// function translationRender(){
-//
-//     // 1. Translate to the origin
-//     let translateMatrix = translate(splitDims[2]/2 + splitDims[0], splitDims[3]/2 + splitDims[1], 0);
-//
-//     // 4. translate back
-//     let newTranslation = translate(oldX + newX, oldY + newY, 0);
-//     ctMatrix = mult(newTranslation, inverse(translateMatrix));
-//
-//     let ctMatrixLoc = gl.getUniformLocation(program, "dragMatrix");
-//     gl.uniformMatrix4fv(ctMatrixLoc, false, flatten(ctMatrix));
-//
-//     gl.clear(gl.COLOR_BUFFER_BIT);
-//     // Draw lines connecting the points
-//     gl.drawArrays(gl.LINES, 0, points.length);
-// }
-
-
 function convert(offsetX, offsetY, movementX, movementY){
-
-    //
 
     newX = convertToWorldX(offsetX) - convertToWorldX(offsetX - movementX);
     newY = convertToWorldY(offsetY) - convertToWorldY(offsetY - movementY);
-
-    // console.log('offsetX = ' + offsetX);
-    // console.log('offsetY = ' + offsetY);
-    //
-    // console.log('movementX = ' + movementX);
-    // console.log('movementY = ' + movementY);
 
     console.log('newX = ' + newX);
     console.log('newY = ' + newY);
